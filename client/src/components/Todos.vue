@@ -17,7 +17,11 @@
         Добавить задачу
       </button>
 
-      <div>Выполнено: {{ count_on }},&nbsp;&nbsp;Не выполнено: {{ count_off }}</div>
+      <div>
+        Выполнено: {{ count_on }},&nbsp;&nbsp;
+        Не выполнено: {{ count_off }},&nbsp;&nbsp;
+        Всего задач: {{ count_all }}
+      </div>
       <table class="table table-dark table-stripped table-hover">
         <thead class="thead-light">
           <tr>
@@ -197,13 +201,15 @@ export default {
       editType: '',
       count_on: 0,
       count_off: 0,
+      count_all: 0,
     };
   },
   methods: {
     getTodos() {
       this.todos = getLst();
+      this.count_all = this.todos.length;
       this.count_on = this.todos.reduce((accum, todo) => accum + (todo.is_completed ? 1 : 0), 0);
-      this.count_off = this.todos.length - this.count_on;
+      this.count_off = this.count_all - this.count_on;
     },
     resetForm() {
       this.editTodoForm.description = '';
