@@ -121,6 +121,18 @@ function setData(data) {
 }
 
 function addRec(editTodoForm) {
+  if (typeof editTodoForm.description !== 'string') {
+    return {
+      confirmation_variant: 'danger',
+      message: `Тип данных поля "Описание": ${typeof editTodoForm.description}`,
+    };
+  }
+  if (typeof editTodoForm.is_completed !== 'boolean') {
+    return {
+      confirmation_variant: 'danger',
+      message: `Тип данных поля "Задача выполнена?": ${typeof editTodoForm.is_completed}`,
+    };
+  }
   const rec = editTodoForm;
   const data = getData();
   const values = Object.values(data);
@@ -135,18 +147,30 @@ function addRec(editTodoForm) {
 }
 
 function updRec(editTodoForm) {
-  const data = getData();
-  if (editTodoForm.uid in data) {
-    data[editTodoForm.uid] = editTodoForm;
-    setData(data);
+  if (typeof editTodoForm.description !== 'string') {
     return {
-      confirmation_variant: 'success',
-      message: `Задача с uid=${editTodoForm.uid} обновлена`,
+      confirmation_variant: 'danger',
+      message: `Тип данных поля "Описание": ${typeof editTodoForm.description}`,
     };
   }
+  if (typeof editTodoForm.is_completed !== 'boolean') {
+    return {
+      confirmation_variant: 'danger',
+      message: `Тип данных поля "Задача выполнена?": ${typeof editTodoForm.is_completed}`,
+    };
+  }
+  const data = getData();
+  if (!(editTodoForm.uid in data)) {
+    return {
+      confirmation_variant: 'danger',
+      message: `Отсутствует uid=${editTodoForm.uid}`,
+    };
+  }
+  data[editTodoForm.uid] = editTodoForm;
+  setData(data);
   return {
-    confirmation_variant: 'danger',
-    message: `Отсутствует uid=${editTodoForm.uid}`,
+    confirmation_variant: 'success',
+    message: `Задача с uid=${editTodoForm.uid} обновлена`,
   };
 }
 
